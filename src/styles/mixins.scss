@@ -1,0 +1,25 @@
+@mixin size($width, $height) {
+   width: #{$width};
+   height: #{$height};
+}
+
+@mixin flex-full-center {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+@mixin flex-align-center {
+   display: flex;
+   align-items: center;
+}
+
+@mixin flex-wrap {
+   display: flex;
+   flex-wrap: wrap;
+}
+
+@mixin transition {
+   -webkit-transition: .3s;
+   transition: .3s;
+}

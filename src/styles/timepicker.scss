@@ -1,0 +1,282 @@
+@use 'mixins' as *;
+@use 'vars';
+
+.rm-timepicker-input {
+   color: inherit;
+}
+
+.rm-timepicker {
+   position: fixed;
+   user-select: none;
+   z-index: 1000;
+   color: var(--rmtp-text-light);
+   padding-top: 5px;
+   -webkit-animation: open-anim .2s 0s forwards;
+   animation: open-anim .2s 0s forwards;
+   * {
+      box-sizing: border-box;
+   }
+}
+
+@keyframes open-anim {
+   from {
+      opacity: 0;
+   }
+   to {
+      opacity: 1;
+   }
+}
+
+.rmtp-pointer {
+   display: block;
+   position: relative;
+   @include size(20px, 20px);
+   margin: 0 auto -10px auto;
+   background-color: var(--rmtp-bg-light);
+   -webkit-transform: rotate(45deg);
+   transform: rotate(45deg);
+   pointer-events: none;
+}
+
+.rmtp-box {
+   position: relative;
+   display: inline-block;
+   background-color: var(--rmtp-bg-light);
+   border-radius: 8px;
+}
+
+.rmtp-digital {
+   @include flex-align-center;
+}
+
+.rmtp-selector-container {
+   display: flex;
+   flex-direction: column;
+   width: 60px;
+}
+
+.rmtp-selector {
+   position: relative;
+   overflow: hidden;
+   width: 100%;
+   aspect-ratio: 1 / 1;
+   order: 2;
+   cursor: grab;
+
+   &::before, &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 15px;
+      z-index: 6;
+      pointer-events: none;
+   }
+   &::before {
+      top: 0;
+      background: linear-gradient(
+         var(--rmtp-bg-light),
+         transparent
+      );
+   }
+   &::after {
+      bottom: 0;
+      background: linear-gradient(
+         to top,
+         var(--rmtp-bg-light),
+         transparent
+      );
+   }
+}
+
+.rmtp-selector-list {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   list-style-type: none;
+   padding: 0;
+   margin: 0;
+   z-index: 5;
+
+   &.animate {
+      -webkit-transition: top .2s;
+      transition: top .15s;
+   }
+   &.animate-faster {
+      -webkit-transition: top .08s;
+      transition: top .08s;
+   }
+}
+
+.rmtp-selector-item {
+   @include flex-full-center;
+   text-align: center;
+   user-select: none;
+   aspect-ratio: 1 / 1;
+   font-size: 30px;
+}
+
+.rmtp-selector-btn {
+   @include flex-full-center;
+   width: 100%;
+   height: 20px;
+   order: 1;
+   cursor: pointer;
+   overflow: hidden;
+   background: none;
+   border: none;
+
+   svg {
+      stroke: var(--rmtp-buttons-light);
+   }
+
+   &.minus {
+      order: 3;
+   }
+
+   &.disable {
+      pointer-events: none;
+      opacity: .25;
+   }
+
+   svg {
+      @include size(16px, 16px);
+   }
+}
+
+.rmtp-main {
+   @include flex-align-center;
+   padding: 15px 11px 15px 5px;
+}
+
+.rmtp-analog {
+   position: relative;
+   width: 80px;
+   aspect-ratio: 1 / 1;
+   background: var(--rmtp-clock-bg-light);
+   margin: 0 0 0 8px;
+   border-radius: 100%;
+   border: 1px solid var(--rmtp-clock-border-light);
+
+   &::after {
+      content: '';
+      display: block;
+      width: 6px;
+      height: 6px;
+      position: absolute;
+      top: calc(50% - 3px);
+      left: calc(50% - 3px);
+      border-radius: 100%;
+      background: var(--rmtp-clock-hands-light);
+   }
+}
+
+.rmtp-analog-point {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   @include transition;
+
+   &::before {
+      content: '';
+      display: block;
+      width: 2px;
+      position: absolute;
+      left: calc(50% - 1px);
+      border-radius: 5px;
+   }
+
+   &.hour {
+      &::before {
+         height: 26%;
+         top: 24%;
+         background: var(--rmtp-clock-hands-light);
+      }
+   }
+
+   &.minute {
+      &::before {
+         height: 45%;
+         top: 5%;
+         background: var(--rmtp-clock-hands-light);
+      }
+   }
+
+   &.second {
+      &::before {
+         height: 45%;
+         top: 5%;
+         background: #d13434;
+         width: 1px;
+         left: 50%;
+      }
+   }
+}
+
+.rmtp-separator {
+   @include flex-full-center;
+   @include size(10px, 10px);
+   font-size: 16px;
+   font-weight: bold;
+   font-family: 'Courier New', Courier, monospace;
+}
+
+.rmtp-daypart {
+   .rmtp-selector-item { 
+      font-size: 20px;
+   }
+}
+
+// DARK THEME COLORS :
+.rm-timepicker.dark {
+   color: var(--rmtp-text-dark);
+   .rmtp-pointer {
+      background-color: var(--rmtp-bg-dark);
+   }
+   .rmtp-box {
+      background-color: var(--rmtp-bg-dark);
+   }
+   .rmtp-selector {
+      &::before {
+         background: linear-gradient(
+            var(--rmtp-bg-dark),
+            transparent
+         );
+      }
+      &::after {
+         background: linear-gradient(
+            to top,
+            var(--rmtp-bg-dark),
+            transparent
+         );
+      }
+   }
+   .rmtp-analog {
+      background: var(--rmtp-clock-bg-dark);
+      border: 1px solid var(--rmtp-clock-border-dark);
+      &::after {
+         background: var(--rmtp-clock-hands-dark);
+      }
+   }
+   .rmtp-analog-point {
+      &.hour {
+         &::before {
+            background: var(--rmtp-clock-hands-dark);
+         }
+      }
+      &.minute {
+         &::before {
+            background: var(--rmtp-clock-hands-dark);
+         }
+      }
+   }
+   .rmtp-selector-btn {
+      svg {
+         stroke: var(--rmtp-buttons-dark);
+      }
+   }
+}
